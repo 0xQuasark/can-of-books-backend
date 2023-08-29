@@ -28,7 +28,7 @@ app.get('/books', async (req, res) => {
 app.post('/books', async(req, res, next) => {
   let { title, description, status, author } = req.body;
 
-  if (!title || !description || !status || !author) {
+  if (!title || !description || !status) {
     res.status(400).send('Please submit all information in a JSON query.')
   }
 
