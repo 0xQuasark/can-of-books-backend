@@ -11,7 +11,7 @@ const MONGODB_URL = process.env.MONGODB_URL;
 
 const app = express();
 app.use(cors());
-
+// console.log(typeof(MONGODB_URL));
 mongoose.connect(MONGODB_URL);
 
 
@@ -25,7 +25,7 @@ app.get('/books', async (req, res) => {
     let documents = await BookModel.find({});
     res.json(documents);
   } catch (e) {
-    console.log('Something went wrong when finding all pokemon: ', e);
+    console.log('Something went wrong when finding all the books: ', e);
     res.status(500).send(e);
   }
 });
