@@ -1,4 +1,14 @@
 GET http://localhost:3001/books
-
 ### 
+POST http://localhost:3001/books
+Content-Type: application/json
+
+{
+    "title": "Ender's Game",
+    "description": "Children trained to be military geniuses to fight against alien invasions.",
+    "status": "unread",
+    "author": "Orson Scott Card"
+  }
+### 
+DELETE http://localhost:3001/books/64ee5fa248aa64f86bd2ac3b
 
