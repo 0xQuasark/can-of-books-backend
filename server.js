@@ -29,7 +29,11 @@ app.post('/books', async(req, res, next) => {
   let { title, description, status, author } = req.body;
 
   if (!title || !description || !status) {
-    res.status(400).send('Please submit all information in a JSON query.')
+    res.status(400).send('Please submit all information in a JSON query. Failed on title')
+  } else if (!description) {
+    res.status(400).send('Please submit all information in a JSON query. Failed on description')
+  } else if (!status) {
+    res.status(400).send('Please submit all information in a JSON query. Failed on status')
   }
 
   try {
