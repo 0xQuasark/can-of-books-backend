@@ -46,10 +46,31 @@ app.post('/books', async(req, res, next) => {
   }
 });
 
+app.put('/books/:bookID', async(req, res) => {
+  let bookId = req.params.bookID;
+  
+  if (!bookId) {
+    res.status(400).send('Please provide a valid Book Id');
+    return;
+  }
+  console.log('Updating (via PUT) book of id: ' + bookId);
+
+  try {
+    await BookModel.replaceOne({ _id: bookId}, req.body);
+    let newBook = await BookModel.findOne({ _id: bookId });
+    res.status(200).json(newBook);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+
+
+});
+
+
 app.delete('/books/:bookID', async (req, res) => {
   let bookId = req.params.bookID;
   if (!bookId) {
-    res.status(404).send('Please provide a valid Book Id');
+    res.status(400).send('Please provide a valid Book Id');
     return;
   }
   console.log('deleting book of id: ' + bookId);
@@ -73,4 +94,4 @@ app.delete('/books/:bookID', async (req, res) => {
 });
 
 
-app.listen(PORT, () => console.log(`app v2.0 listening on ${PORT}`));
+app.listen(PORT, () => console.log(`app v2.1 listening on ${PORT}`));
