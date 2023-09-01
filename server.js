@@ -3,21 +3,28 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
-const BookModel = require('./BookModel.js');
+
+const authorize = require('./auth/authorize.js');
 
 const PORT = process.env.PORT || 3001;
 const MONGODB_URL = process.env.MONGODB_URL;
-
 const app = express();
+
+const mongoose = require('mongoose');
+const BookModel = require('./BookModel.js');
+
+
 app.use(cors());
 app.use(express.json());
-mongoose.connect(MONGODB_URL);
+app.use(authorize);
 
+
+mongoose.connect(MONGODB_URL);
 
 app.get('/books', async (req, res) => {
   try {
-    let documents = await BookModel.find({});
+    console.log('Finding userEmail: ' + req.user.email);
+    let documents = await BookModel.find({ userEmail : req.user.email });
     res.json(documents);
   } catch (e) {
     console.log('Something went wrong when finding all the books: ', e);
@@ -26,9 +33,9 @@ app.get('/books', async (req, res) => {
 });
 
 app.post('/books', async(req, res, next) => {
-  let { title, description, status, author } = req.body;
+  let { title, description, status, userEmail } = req.body;
 
-  if (!title || !description || !status) {
+  if (!title) {
     res.status(400).send('Please submit all information in a JSON query. Failed on title')
   } else if (!description) {
     res.status(400).send('Please submit all information in a JSON query. Failed on description')
@@ -37,10 +44,10 @@ app.post('/books', async(req, res, next) => {
   }
 
   try {
-    let newBook = new BookModel({ title, description, status, author });
+    let newBook = new BookModel({ title, description, status, userEmail: req.user.email });
     let document = await newBook.save();
     console.log('New Book Created, ', document);
-    res.json(document);
+    res.status(201).json(document);
   } catch (err){
     res.status(500).send(err);
   }
@@ -56,7 +63,7 @@ app.put('/books/:bookID', async(req, res) => {
   console.log('Updating (via PUT) book of id: ' + bookId);
 
   try {
-    await BookModel.replaceOne({ _id: bookId}, req.body);
+    await BookModel.replaceOne({ _id: bookId, userEmail: req.user.email }, req.body);
     let newBook = await BookModel.findOne({ _id: bookId });
     res.status(200).json(newBook);
   } catch (err) {
@@ -75,7 +82,7 @@ app.delete('/books/:bookID', async (req, res) => {
   }
   console.log('deleting book of id: ' + bookId);
   try {
-    let result = await BookModel.findByIdAndDelete(bookId);
+    let result = await BookModel.findOneAndDelete({ _id: bookId, userEmail: req.user.email });
 
     if (!result) {
       res.status(404).send('Book ID not found.');
@@ -94,4 +101,4 @@ app.delete('/books/:bookID', async (req, res) => {
 });
 
 
-app.listen(PORT, () => console.log(`app v2.1 listening on ${PORT}`));
+app.listen(PORT, () => console.log(`app v2.5 listening on ${PORT}`));

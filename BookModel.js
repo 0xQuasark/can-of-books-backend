@@ -15,6 +15,11 @@ const bookSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  userEmail: {
+    type: String,
+    required: false,
+    default: 'Anon User',
+  },
   author: {
     type: String,
     required: false,

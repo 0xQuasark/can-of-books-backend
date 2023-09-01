@@ -18,7 +18,8 @@ POST http://localhost:3001/books
 Content-Type: application/json
 
 {
-    "title": "Ender's Game",
+    "userEmail": "sugaraspa@gmail.com",
+    "title": "joejoe",
     "description": "Children trained to be military geniuses to fight against alien invasions.",
     "status": "unread"
 }
