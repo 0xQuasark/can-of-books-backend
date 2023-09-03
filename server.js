@@ -95,7 +95,7 @@ app.delete('/books/:bookID', async (req, res) => {
     if (err.name === 'CastError') {
       res.status(400).send('Invalid book ID format');
     } else {
-      res.status(500).send('Internal Server Error');
+      res.status(500).send('Internal Server Error, log as follows: ', err);
     }
   }
 });
