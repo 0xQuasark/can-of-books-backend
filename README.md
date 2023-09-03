@@ -4,6 +4,7 @@ In collaboration:
 - Paul Brown
 - Nika Skeba ([Frontend](https://github.com/nikaskeba/Can-of-Books-Frontend))
 
+Whoops, I merged to main already. I'm not sure how to show the diff. I incorporated authorize.js, made endpoints use email to read/write
 
 ## What can books do?
 
