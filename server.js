@@ -16,10 +16,16 @@ const BookModel = require('./BookModel.js');
 
 app.use(cors());
 app.use(express.json());
-app.use(authorize);
+// app.use(authorize);
 
 
 mongoose.connect(MONGODB_URL);
+
+app.get('/pokemon', (req, res) => {
+  console.log('req.user: ', req.user);
+  res.send('You made it to the most EPIC server yet!');
+});
+
 
 app.get('/books', async (req, res) => {
   try {
